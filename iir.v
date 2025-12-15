@@ -1,12 +1,11 @@
 module iir (
     input clk,
     reset_n,
-    sleep,
     input signed [3:0] x,
     b0,
     b1,
     a1,
-    output reg signed [7:0] y
+    output signed [7:0] y
 );
 
   reg signed  [ 3:0] x_n_1;
@@ -34,9 +33,7 @@ module iir (
       end
     end
   end
-  always @(*) begin
-    if (!sleep) begin
-      y = product_b0_x + product_b1_x_n_1 + feedback_term_scaled;
-    end
-  end
+
+  assign y = product_b0_x + product_b1_x_n_1 + feedback_term_scaled;
 endmodule
+
