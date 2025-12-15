@@ -1,6 +1,6 @@
 module iir_tb ();
   reg signed [3:0] a1, b1, b0, x;
-  reg sleep, clk, reset_n;
+  reg clk, reset_n;
   wire signed [7:0] y, y_exp;
   integer i, j;
   integer correct = 0;
@@ -12,7 +12,6 @@ module iir_tb ();
       .b0(b0),
       .b1(b1),
       .a1(a1),
-      .sleep(sleep),
       .y(y)
   );
   IIR_golden_model GM (
@@ -22,7 +21,6 @@ module iir_tb ();
       .b0(b0),
       .b1(b1),
       .a1(a1),
-      .sleep(sleep),
       .y(y_exp)
   );
   initial begin
@@ -37,7 +35,6 @@ module iir_tb ();
     a1 = 0;
     x = 0;
     reset_n = 0;
-    sleep = 0;
     @(negedge clk);
     reset_n = 1;
     @(negedge clk);
@@ -46,14 +43,14 @@ module iir_tb ();
     b1 = 0;
     a1 = 4;
     repeat (10) @(negedge clk);  //test case 1
-    x = 0;  //reseting x
+    x = 0;
     @(negedge clk);
     x  = 5;
     b0 = 2;
     b1 = -2;
     a1 = -4;
     repeat (10) @(negedge clk);  //test case 2
-    x = 5;  //waiting for a clk cycle
+    x = 5;
     @(negedge clk);
     x  = 0;
     b0 = 3;
@@ -84,14 +81,13 @@ module iir_tb ();
       b0 = $random;
       b1 = $random;
       a1 = $random;
-      sleep = $random;
       reset_n = $random;
       @(negedge clk);
     end
     $stop;
   end
 
-  always @(posedge clk or negedge reset_n) begin
+  always @(posedge clk) begin
     if (y === y_exp) begin
       $display("****************************PASS*****************************");
       $display("Inputs:");
@@ -99,7 +95,6 @@ module iir_tb ();
       $display("  b0  = %0h", b0);
       $display("  b1  = %0h", b1);
       $display("  a1  = %0h", a1);
-      $display("  sleep = %0h", sleep);
       $display("Outputs:");
       $display("  y       = %0h", y);
       $display("  expected= %0h", y_exp);
@@ -112,7 +107,6 @@ module iir_tb ();
       $display("  b0  = %0h", b0);
       $display("  b1  = %0h", b1);
       $display("  a1  = %0h", a1);
-      $display("  sleep = %0h", sleep);
       $display("Outputs:");
       $display("  y       = %0h", y);
       $display("  expected= %0h", y_exp);
@@ -123,3 +117,5 @@ module iir_tb ();
     $display("False_value=%0d", false);
   end
 endmodule
+
+
