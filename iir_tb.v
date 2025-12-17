@@ -38,44 +38,51 @@ module iir_tb ();
     @(negedge clk);
     reset_n = 1;
     @(negedge clk);
+    //begin case 1
     x  = 5;
     b0 = 3;
     b1 = 0;
     a1 = 4;
-    repeat (10) @(negedge clk);  //test case 1
+    repeat (10) @(negedge clk);  //test case 1 //waiting for steady state
     x = 0;
-    @(negedge clk);
+    repeat (10) @(negedge clk);  //reseting x to 0 and y to 0
+    //begin case 2
     x  = 5;
     b0 = 2;
     b1 = -2;
     a1 = -4;
-    repeat (10) @(negedge clk);  //test case 2
-    x = 5;
-    @(negedge clk);
-    x  = 0;
+    repeat (10) @(negedge clk);  //test case 2 waiting for steady state
+    x = 0;
+    repeat (10) @(negedge clk);  //reseting x to 0 and y to 0
+    //begin of case 3
+    x  = 5;
     b0 = 3;
     b1 = 3;
     a1 = 7;
-    repeat (10) @(negedge clk);  //test case 3
-    @(negedge clk);
+    @(negedge clk);  //test case 3 waiting for steady state 
+    x = 0;
+    repeat (10) @(negedge clk);  //reseting x to 0 and y to 0
+    //begin of case 4 
     b0 = 1;
     b1 = 1;
     a1 = 4;
+    //the toggle between x=2 and x=6 for 10 clk cycles 
     for (i = 0; i < 10; i = i + 1) begin
       if (i % 2 == 0) begin
         x = 2;
       end else x = 6;
       @(negedge clk);
     end
-    repeat (10) @(negedge clk);  //test case 4
+    @(negedge clk);  //end of test case 4
     x = 0;
-    @(negedge clk);
+    repeat (10) @(negedge clk);  //reseting x to 0 and y to 0
+    //begin of test case 5
     b0 = 7;
     b1 = 7;
     a1 = 6;
     x  = 7;
-    repeat (10) @(negedge clk);
-    //FOR EXTRA VERIFICATION NOW TEST MORE RANDOM INPUTS
+    repeat (10) @(negedge clk);  //waiting for steady state 
+    //FOR EXTRA VERIFICATION BETWEEN GOLDEN MODEL AND DUT NOW TEST MORE RANDOM INPUTS
     for (j = 0; j < 100; j = j + 1) begin
       x = $random;
       b0 = $random;
