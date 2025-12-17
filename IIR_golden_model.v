@@ -31,7 +31,6 @@ module IIR_golden_model (
 
   assign y                         = x_b0 + x_reg_b1 + y_reg_a1_excluding_4_LSBs;
 
-
   assign x_b0                      = x * b0;
   assign x_reg_b1                  = x_reg * b1;
   assign y_reg_a1                  = y_reg * a1;
